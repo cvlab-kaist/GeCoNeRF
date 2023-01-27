@@ -1,4 +1,4 @@
-# SplitNet
+# GeCoNeRF
 
 Code will be uploaded soon.
 

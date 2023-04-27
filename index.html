@@ -1,0 +1,469 @@
+<script src="http://www.google.com/jsapi" type="text/javascript"></script> 
+<script type="text/javascript">google.load("jquery", "1.3.2");</script>
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<style type="text/css">
+	body {
+		font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+		font-weight:300;
+		font-size:18px;
+		margin-left: auto;
+		margin-right: auto;
+		width: 1100px;
+	}
+	
+	h1 {
+		font-size:32px;
+		font-weight:300;
+	}
+	
+	.disclaimerbox {
+		background-color: #eee;		
+		border: 1px solid #eeeeee;
+		border-radius: 10px ;
+		-moz-border-radius: 10px ;
+		-webkit-border-radius: 10px ;
+		padding: 20px;
+	}
+
+	video.header-vid {
+		height: 140px;
+		border: 1px solid black;
+		border-radius: 10px ;
+		-moz-border-radius: 10px ;
+		-webkit-border-radius: 10px ;
+	}
+	
+	img.header-img {
+		height: 140px;
+		border: 1px solid black;
+		border-radius: 10px ;
+		-moz-border-radius: 10px ;
+		-webkit-border-radius: 10px ;
+	}
+	
+	img.rounded {
+		border: 1px solid #eeeeee;
+		border-radius: 10px ;
+		-moz-border-radius: 10px ;
+		-webkit-border-radius: 10px ;
+	}
+	
+	a:link,a:visited
+	{
+		color: #1367a7;
+		text-decoration: none;
+	}
+	a:hover {
+		color: #208799;
+	}
+	
+	td.dl-link {
+		height: 160px;
+		text-align: center;
+		font-size: 22px;
+	}
+	
+	.layered-paper-big { /* modified from: http://css-tricks.com/snippets/css/layered-paper/ */
+		box-shadow:
+		0px 0px 1px 1px rgba(0,0,0,0.35), /* The top layer shadow */
+		5px 5px 0 0px #fff, /* The second layer */
+		5px 5px 1px 1px rgba(0,0,0,0.35), /* The second layer shadow */
+		10px 10px 0 0px #fff, /* The third layer */
+		10px 10px 1px 1px rgba(0,0,0,0.35), /* The third layer shadow */
+		15px 15px 0 0px #fff, /* The fourth layer */
+		15px 15px 1px 1px rgba(0,0,0,0.35), /* The fourth layer shadow */
+		20px 20px 0 0px #fff, /* The fifth layer */
+		20px 20px 1px 1px rgba(0,0,0,0.35), /* The fifth layer shadow */
+		25px 25px 0 0px #fff, /* The fifth layer */
+		25px 25px 1px 1px rgba(0,0,0,0.35); /* The fifth layer shadow */
+		margin-left: 10px;
+		margin-right: 45px;
+	}
+
+	.paper-big { /* modified from: http://css-tricks.com/snippets/css/layered-paper/ */
+		box-shadow:
+		0px 0px 1px 1px rgba(0,0,0,0.35); /* The top layer shadow */
+
+		margin-left: 10px;
+		margin-right: 45px;
+	}
+
+
+	.layered-paper { /* modified from: http://css-tricks.com/snippets/css/layered-paper/ */
+		box-shadow:
+		0px 0px 1px 1px rgba(0,0,0,0.35), /* The top layer shadow */
+		5px 5px 0 0px #fff, /* The second layer */
+		5px 5px 1px 1px rgba(0,0,0,0.35), /* The second layer shadow */
+		10px 10px 0 0px #fff, /* The third layer */
+		10px 10px 1px 1px rgba(0,0,0,0.35); /* The third layer shadow */
+		margin-top: 5px;
+		margin-left: 10px;
+		margin-right: 30px;
+		margin-bottom: 5px;
+	}
+	
+	.vert-cent {
+		position: relative;
+		top: 50%;
+		transform: translateY(-50%);
+	}
+	
+	hr
+	{
+		border: 0;
+		height: 1px;
+		background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+	}
+</style>
+
+
+<html>
+<head>
+
+	<title>GeCoNeRF</title>
+	<meta property="og:image" content="./resources/overview.png"/> <!-- Facebook automatically scrapes this. Go to https://developers.facebook.com/tools/debug/ if you update and want to force Facebook to rescrape. -->
+	<meta property="og:title" content="GeCoNeRF: Few-shot Neural Radiance Fields via Geometric Consistency" />
+	<meta property="og:description" content="Paper description." />
+
+	<!-- Get from Google Analytics -->
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src=""></script> 
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-75863369-6');
+	</script>
+</head>
+
+<body>
+	<br>
+	<center>
+		<span style="font-size:36px">GeCoNeRF: Few-shot Neural Radiance Fields via Geometric Consistency</span>
+		<table align=center width=900px>
+			<table align=center width=900px>
+				<tr>
+					<td align=center width=100px>
+						<center>
+							<span style="font-size:24px"><a href=".">Minseop Kwak</a><sup>*</sup>,</span>
+						</center>
+					</td>
+					<td align=center width=100px>
+						<center>
+							<span style="font-size:24px"><a href=".">Jiuhn Song</a><sup>*</sup>,</span>
+						</center>
+					</td><td align=center width=100px>
+						<center>
+							<span style="font-size:24px"><a href="https://cvlab.korea.ac.kr/members">Seungryong Kim</a><sup>†</sup>,</span>
+						</center>
+					</td>
+				</tr>
+			</table>
+
+			<table align=center width=800px>
+				<tr>
+					<td align=center width=150px>
+						<center>
+							<span style="font-size:20px">Korea University</a></span>
+						</center>
+					</td>
+				</tr>
+				<tr>
+					<td align=center width=150px>
+						<center>
+							<small><sup>*</sup>Equal contribution <sup>†</sup>Corresponding author </small>
+						</center>
+					</td>
+				</tr>
+			</table>   
+			
+			<table align=center width=250px>
+				<tr>
+					<td align=center width=120px>
+						<center>
+							<span style="font-size:24px"><a href='https://arxiv.org/abs/2301.10941'>[Paper]</a></span>
+						</center>
+					</td>
+					<td align=center width=120px>
+						<center>
+							<span style="font-size:24px"><a href='https://github.com/KU-CVLAB/GeCoNeRF'>[GitHub]</a></span><br>
+						</center>
+					</td>
+				</tr>
+			</table>
+		</table>
+	</center>
+
+	<center>
+		<table align=center width=850px>			
+			<tr>
+				<td width=850px>
+					<center>
+						<img class="round" style="width:120px" src="./resources/white.png"/>
+					</center>
+					<center>
+						<img class="round" style="width:850px" src="./resources/material.gif"/>
+					</center>
+					<center>
+						<img class="round" style="width:60px" src="./resources/white.png"/>
+					</center>
+					<center>
+						<img class="round" style="width:850px" src="./resources/lego.gif"/>
+					<center>
+						<img class="round" style="width:60px" src="./resources/white.png"/>
+					</center>
+					<center>
+						<img class="round" style="width:850px" src="./resources/titles.png"/>
+					<center>
+					<center>
+						<img class="round" style="width:20px" src="./resources/white.png"/>
+					</center>
+					</center>
+						Qualitative comparison on NeRF-Synthetic show that in 3-view setting, 
+						our method captures fine details more robustly
+						and produces less artifacts compared to previous methods, as shown in \(materials\) scene and \(lego\) scene of NeRF-Synthetic dataset. <br><br>
+				</td>
+			</tr>
+		</table>
+	</center>
+
+	<hr>
+
+	<table align=center width=850px>
+		<center><h1>Abstract</h1></center>
+		<tr>
+			<td>
+				We present a novel framework to regularize Neural Radiance Field (NeRF) 
+				in a few-shot setting with a geometry-aware consistency regularization. 
+				The proposed approach leverages a rendered depth map at unobserved viewpoint 
+				to warp sparse input images to the unobserved viewpoint and impose them as 
+				pseudo ground truths to facilitate learning of NeRF. 
+				By encouraging such geometry-aware consistency at a feature-level 
+				instead of using pixel-level reconstruction loss, we regularize the NeRF 
+				at semantic and structural levels while allowing for modeling view-dependent radiance 
+				to account for color variations across viewpoints. 
+				We also propose an effective method to filter out erroneous warped solutions, 
+				along with training strategies to stabilize training during optimization. 
+				We show that our model achieves competitive results 
+				compared to state-of-the-art few-shot NeRF models.
+			</td>
+		</tr>
+	</table>
+
+	<hr>
+
+	<center><h1>Overview of our Framework</h1></center>
+
+	<table align=center width=420px>
+		<center>
+			<tr>
+				<td>
+				</td>
+			</tr>
+		</center>
+	</table>
+	<table align=center width=400px>
+		<tr>
+			<td align=center width=1000px>
+				<center>
+					<td><img class="round" style="width:1000px" src="./resources/overview.png"/></td>
+				</center>
+			</td>
+		</tr>
+	</table>
+	<table align=center width=850px>
+		<center>
+			<tr>
+				<td>
+					Given an image \(\mathcal{I}_\mathrm{i}\) and estimated depth map \(\mathcal{D}_\mathrm{j}\) of \(j\)-th unobserved viewpoint, 
+					we warp the image \(\mathcal{I}_\mathrm{i}\) to that novel viewpoint as \(I_{i \rightarrow j}\) by establishing 
+					geometric correspondence between two viewpoints.
+					Using the warped image as a pseudo ground truth, we cause rendered image of unseen viewpoint, 
+					\(\mathcal{I}_\mathrm{j}\), to be consistent in structure with warped image, with occlusions taken into consideration.
+				</td>
+			</tr>
+		</center>
+	</table>
+
+	<hr>
+
+	<table align=center width=850px>
+		<center><h1>Qualitative Results</h1></center>
+
+		<center><h1><span style="font-size:25px">Comparison on NeRF-Synthetic Datatest</span></h1></center>
+		<table align=center width=420px></table>
+		<tr>
+			<td align=center width=850px>
+				<center>
+					<td><img class="round" style="width:850px" src="./resources/comparison_other.png"/></td>
+				</center>
+			</td>
+		</tr>
+		</table>
+		<table align=center width=850px>
+			<center>
+				<tr>
+					<td>
+						Qualitative comparison results in NeRF-Synthetic dataset demonstrate 
+						that our model shows superior performance to baseline <a href="https://arxiv.org/abs/2103.13415">mip-NeRF</a></span>  and previous state-of-the-art model, 
+						<a href="https://arxiv.org/abs/2112.00724">RegNeRF</a></span>, in 3-view settings. 
+						We observe that our warping-based consistency enables GeCoNeRF to capture fine details that mip-NeRF and RegNeRF struggle to capture 
+						in same sparse view scenarios, as demonstrated with the \(mic\) scene. 
+						Our method also displays higher stability in rendering smooth surfaces and reducing artifacts in background in comparison to previous models,
+						as shown in the results of the \(materials\) scene. 
+						We argue that these results demonstrate how our method, through generation of warped pseudo ground truth patches, 
+						is able to give the model local, scene-specific regularization that aids recovery of fine details, 
+						which previous few-shot NeRF models with their global, generalized priors were unable to accomplish. 
+					</td>
+				</tr>
+			</center>
+		</table>	
+		<center><h1><span style="font-size:25px">Comparison on LLFF Datatest</span></h1></center>
+		<table align=center width=420px></table>
+		<tr>
+			<td align=center width=850px>
+				<center>
+					<td><img class="round" style="width:850px" src="./resources/qual_comparison.png"/></td>
+				</center>
+			</td>
+		</tr>
+		</table>
+		<table align=center width=850px>
+			<center>
+				<tr> 
+					<td>
+						Qualitative comparison on LLFF dataset with baseline mip-NeRF shows that our model learns of coherent depth and geometry in extremely sparse 3-view setting.
+					</td>
+				</tr>
+			</center>
+		</table>
+		<!-- <center><h1><span style="font-size:25px">Qualitative Results on KITTI</span></h1></center>
+		<tr>
+			<td align=center width=850px>
+				<center>
+					<td><img class="round" style="width:850px" src="./resources/KITTI_additional.png"/></td>
+				</center>
+			</td>
+		</tr>
+		<center><h1><span style="font-size:25px">Qualitative Supervised Results on KITTI</span></h1></center>
+		<tr>
+			<td align=center width=850px>
+				<center>
+					<td><img class="round" style="width:850px" src="./resources/NYU_additional.png"/></td>
+				</center>
+			</td>
+		</tr> -->
+
+	<!-- <hr>
+	<table align=center width=850px>
+		<center><h1>Quantative Results</h1></center>
+		<table align=center width=420px></table>
+		<tr>
+			<td align=center width=850px>
+				<center>
+					<td><img class="round" style="width:900px" src="./resources/comparison_qual.png"/></td>
+				</center>
+			</td>
+		</tr>
+		</table>
+		<table align=center width=850px>
+			<center>
+				<tr>
+					<td>
+						We quantify novel view synthesis quality using PSNR, 
+						Structural Similarity Index Measure (SSIM), LPIPS perceptual metric and "average" error metric 
+						introduced in <a href="https://arxiv.org/abs/2103.13415">mip-NeRF</a></span> to report 
+						the mean value of metrics for all scenes in each dataset. 
+						Quantitative results shows our model's competitive results in LLFF dataset, 
+						whose PSNR results show large increase in comparison to mip-NeRF baseline 
+						and competitive compared to RegNeRF. 
+						We see that our warping-based consistency modeling successfully prevents 
+						overfitting and artifacts, which allows our model to perform better quantitatively.
+					</td>
+				</tr>
+			</center>
+		</table>
+	</table> -->
+
+	<hr>
+	<table align=center width=850px>
+		<center><h1>Ablation Results</h1></center>
+		<table align=center width=420px></table>
+		<tr>
+			<td align=center width=850px>
+				<center>
+					<td><img class="round" style="width:850px" src="./resources/ablation.png"/></td>
+				</center>
+			</td>
+		</tr>
+		<tr>
+			<td align=center width=850px>
+				<center>
+					<img class="round" style="width:100px" src="./resources/white.png"/>
+				</center>
+				<center>
+					<td><img class="round" style="width:850px" src="./resources/ablation_table.png"/></td>
+				</center>
+			</td>
+		</tr>
+		</table>
+		<table align=center width=850px>
+			<center>
+				<tr>
+					<td>
+						We validate the design choices in our model by performing both an ablative study. 
+						We observe that without the consistency modeling loss, our model suffers a sharp decrease in reconstruction fidelity both quantitatively and qualitatively. 
+						We also validate the inclusion of our occlusion mask, progressive modeling method and disparity regularization loss.
+					</td>
+				</tr>
+			</center>
+		</table>
+	</table>
+
+
+	<hr>
+
+	<table align=center width=450px>
+		<center><h1>Paper and Supplementary Material</h1></center>
+		<tr>
+			<td><a href=""><img class="layered-paper-big" style="height:175px" src="./resources/frontpage.png"/></a></td>
+			<td><span style="font-size:14pt">M. Kwak, J. Song, <br> S. Kim<br>
+				<b>GeCoNeRF: Few-shot Neural Radiance Fields via Geometric Consistency</b><br>
+				(hosted on <a href="https://arxiv.org/abs/2301.10941">ArXiv</a>)<br>
+				<span style="font-size:4pt"><a href=""><br></a>
+				</span>
+			</td>
+		</tr>
+	</table>
+	<br>
+
+	<table align=center width=600px>
+		<tr>
+			<td><span style="font-size:14pt"><center>
+				<a href="./resources/bibtex.txt">[Bibtex]</a>
+			</center></td>
+		</tr>
+	</table>
+
+	<br>
+	<hr>
+
+	<table align=center width=900px>
+		<tr>
+			<td width=400px>
+				<left>
+					<center><h1>Acknowledgements</h1></center>
+
+					This template was originally made by <a href="http://web.mit.edu/phillipi/">Phillip Isola</a> and <a href="http://richzhang.github.io/">Richard Zhang</a> for a <a href="http://richzhang.github.io/colorization/">colorful</a> ECCV project; the code can be found <a href="https://github.com/richzhang/webpage-template">here</a>.
+
+				</left>
+			</td>
+		</tr>
+	</table>
+
+<br>
+</body>
+</html>
+

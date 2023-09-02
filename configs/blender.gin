@@ -1,0 +1,2 @@
+Config.dataset_loader = 'blender'
+Config.batching = 'single_image'

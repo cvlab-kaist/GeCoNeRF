@@ -5,7 +5,6 @@ This code is the official implementation of the paper [GeCoNeRF: Few-shot Neural
 ## Abstract
 We present a novel framework to regularize Neural Radiance Field (NeRF) in a few-shot setting with a geometry-aware consistency regularization. The proposed approach leverages a rendered depth map at unobserved viewpoint to warp sparse input images to the unobserved viewpoint and impose them as pseudo ground truths to facilitate learning of NeRF. By encouraging such geometry-aware consistency at a feature-level instead of using pixel-level reconstruction loss, we regularize the NeRF at semantic and structural levels while allowing for modeling view dependent radiance to account for color variations across viewpoints. We also propose an effective method to filter out erroneous warped solutions, along with training strategies to stabilize training during optimization. We show that our model achieves competitive results compared to state-of-the-art few-shot NeRF models. 
 
-
 ## Installation
 
 We recommend using [Anaconda](https://www.anaconda.com/products/individual) to set
@@ -14,11 +13,13 @@ up the environment. Run the following commands:
 ```
 # Clone the repo
 git clone https://github.com/KU-CVLAB/GeCoNeRF.git; cd geconerf
-conda create --name geconerf python=3.6.13; conda activate geconerf
+conda create --nam e geconerf python=3.6.13; conda activate geconerf
 conda install pip; pip install --upgrade pip
 pip install --upgrade jax jaxlib==0.1.68+cuda110 -f https://storage.googleapis.com/jax-releases/jax_cuda_releases.html
 pip install -r requirements.txt
 ```
+
+**Note** : As of 2024.03.04, we find that the codebase currently uploaded on Github contains an error, with its results on LLFF falling short its original performance stated in our paper due to its currently erroneous, downgraded performance. We intend to fix this error as soon as possible, and will update our codebase in a short notice.
 
 ## Data
 
